@@ -1,39 +1,81 @@
-# strong-pm
+# strong-pm - Process Manager
 
-StrongLoop process manager.
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/strongloop/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+StrongLoop's process manager, strong-pm, allows you to build, deploy, monitor,
+and debug your apps in development and in production.
+
+For more details, see http://strong-pm.io.
 
 ## Installation
 
-    npm install -g strong-pm
+Install the manager on a production server:
+
+    npm install -g strong-pm && sl-pm-install
+
+Or using docker:
+
+    curl -sO https://cdn.rawgit.com/strongloop/strong-pm/master/docker/install.sh | sudo /bin/sh
+
+XXX ^--- above should be a strong-pm.io link
+
+Install the client-side [CLI](https://github.com/strongloop/strongloop) and
+[GUI](https://github.com/strongloop/strong-arc) (`slc arc`):
+
+    npm install -g strongloop
+    slc -h
+
+
+## Features
+
+- full life-cycle toolset, most tools available as both CLI and GUI
+- git and http-based deploy
+- strong authentication and encryption via basic auth and ssh
+- zero down-time restart on redeploy
+- robust multi-cpu usage and restart on failure via node
+  [cluster](https://nodejs.org/api/cluster.html#cluster_how_it_works)
+- run-time CPU and heap profiling
+- log, process environment, and npm dependency managment
+- performance metrics, such as loop times, requests response times, etc
+- expanding list of 3rdparty integrations, metrics can be published to
+  [etsy/statsd](https://github.com/etsy/statsd) compatible servers, such as
+  [DataDog](https://www.datadoghq.com/), as well as natively to
+  [Graphite](http://graphite.readthedocs.org/en/latest) and
+  [Splunk](http://www.splunk.com), and even syslog and raw log files.
+
 
 ## Quick Start
 
-It is recommend to install the process manager as a system service, see below,
-but if you are just trying the manager out to try it, it can be run directly
-from the command line.
+Under production, you will install the process manager as a system service, see
+below, but if you are just trying the manager out on localy, you can run an app
+directly from the command line.
 
-Run process manager:
-
-    sl-pm
-
-Install [strong-build](http://github.com/strongloop/strong-build) and
-[strong-deploy](http://github.com/strongloop/strong-deploy):
-
-    npm install -g strong-build
-    npm install -g strong-deploy
-
-Clone, build, and deploy an app, the loopback example app in this example, but
-any node application can be managed:
+Get a sample app (or use your own app):
 
     git clone git@github.com:strongloop/loopback-example-app.git
     cd loopback-example-app
-    sl-build
-    sl-deploy
+    npm install
+
+XXX use another sample?
+
+Start the app under the process manager:
+
+    slc start
+
+Interact with the app using the StrongLoop GUI:
+
+    slc arc
+
+See [strong-pm.io](http://strong-pm.io) for more information.
+
 
 ## Life-cycle
 
-When applications are deployed to the manager, it first prepares them. The
-prepare commands used are:
+The process manager is responsible for receiving packaged applications,
+preparing them to be run, and then running them under supervision (clustered,
+with run-time profiling and metrics support, restart on failure, etc.).
+
+The prepare commands used are:
 
 - `npm rebuild`
 - `npm install --production`
@@ -43,14 +85,15 @@ install and pre-install scripts, if necessary.
 
 After preparation, the application is run.
 
-## Installing as a Service
 
-The process manager should be installed as a service, so it gets integration
-with the system process manager. This will ensure it is started on machine boot,
-logs are correctly aggregated, permissions are set correctly, etc.
+## Installing via npm as a Service
 
-The pm-install tool does this installation for you, and supports the following
-init systems:
+The process manager should be installed as a service, under the control of the
+system process manager. This will ensure it is started on machine boot, logs are
+correctly aggregated, permissions are set correctly, etc.
+
+The sl-pm-install tool does this installation for you, and supports the
+following init systems:
 
 - Upstart 0.6
 - Upstart 1.4 (default)
@@ -70,34 +113,23 @@ the `--user` option.
 You can also `--job-file` to generate the service file locally, and move it to
 the remote system manually.
 
-## Installing from Docker Hub
 
-This repository is also the source of the
+## Installing via Docker Hub
+
+This repository is the source of the
 [strongloop/strong-pm](https://registry.hub.docker.com/u/strongloop/strong-pm/)
 repo on Docker Hub. You can get started as quickly as:
 
-```sh
-$ docker pull strongloop/strong-pm
-$ docker run -d -p 8701:8701 -p 80:3000 --name strong-pm strongloop/strong-pm
-```
+    docker pull strongloop/strong-pm
+    docker run -d -p 8701:8701 -p 80:3000 --name strong-pm strongloop/strong-pm
 
-And now you've got a strong-pm container up and running. You can deploy
-to it with `slc deploy http://localhost:8701`.
+And now you've got a strong-pm container up and running. You can deploy to it
+with `slc deploy http://localhost:8701`.
 
-For more information on Docker and Docker Hub, see https://www.docker.com/
+This image can be run as an OS service without the need to install strong-pm,
+npm, or even node on your server. All you need is Docker and curl!
 
-## Installing as a Dockerized Service
-
-One of the things you can do with the
-[strongloop/strong-pm](https://registry.hub.docker.com/u/strongloop/strong-pm/)
-image is run it as an OS service without the need to install strong-pm, npm, or
-even node on your server. All you need is Docker!
-
-You can do this [the hard way](docker/README.md) and pull down the image, start
-a container, and write your own Upstart or systemd config file, or you can use
-our install script to do it for you:
-
-    curl -s https://cdn.rawgit.com/strongloop/strong-pm/master/docker/install.sh | sudo sh
+    curl -sO https://cdn.rawgit.com/strongloop/strong-pm/master/docker/install.sh | sudo /bin/sh
 
 The created service will use port 8701 for strong-pm's API, port 3000 for your
 app, and the container will be restarted if your server reboots.
@@ -105,16 +137,37 @@ app, and the container will be restarted if your server reboots.
 If you want to step through all the steps yourself, the script is based off of
 a guide in [docker/README.md](docker/README.md).
 
+For more information on Docker and Docker Hub, see https://www.docker.com/
+
+
+## Resources
+
+- [Documentation](http://docs.strongloop.com/display/SLC/Operating+Node+applications).
+- [StrongLoop Google Group](https://groups.google.com/forum/#!forum/strongloop).
+- [GitHub issues](https://github.com/strongloop/strong-pm/issues).
+- [Gitter chat](https://gitter.im/strongloop/chat).
+
+
 ## Usage
 
-These tools are also available as the `pm`, `pm-install`, and `pmctl`
-sub-commands of the [strongloop](http://github.com/strongloop/strongloop)
-package.
-
-### sl-pm
+### slc start
 
 ```
-usage: sl-pm [options]
+usage: slc start [app/]
+
+Options:
+  -h,--help         Print this message and exit.
+  -v,--version      Print version and exit.
+
+Start `app` in the background under the process manager.
+
+If not specified, the application in the current working directory is started.
+```
+
+### slc pm
+
+```
+usage: slc pm [options]
 
 The Strongloop process manager.
 
@@ -140,49 +193,10 @@ and the listen path can be changed or disabled. These sockets do not support
 HTTP authentication.
 ```
 
-### slc pm-install
+### slc ctl
 
 ```
-usage: sl-pm-install [options]
-
-Install the Strongloop process manager as a service.
-
-Options:
-  -h,--help           Print this message and exit.
-  -v,--version        Print version and exit.
-  -m,--metrics STATS  Specify --metrics option for supervisor running deployed
-                      applications.
-  -b,--base BASE      Base directory to work in (default is $HOME of the user
-                      that manager is run as, see --user).
-  -e,--set-env K=V... Initial application environment variables. If setting
-                      multiple variables they must be quoted into a single
-                      argument: "K1=V1 K2=V2 K3=V3".
-  -u,--user USER      User to run manager as (default is strong-pm).
-  -p,--port PORT      Listen on PORT for application deployment (default 8701).
-  -n,--dry-run        Don't write any files.
-  -j,--job-file FILE  Path of Upstart job to create (default is
-                      `/etc/init/strong-pm.conf`).
-  -f,--force          Overwrite existing job file if present.
-  --upstart VERSION   Specify Upstart version, 1.4 or 0.6 (default is 1.4).
-  --systemd           Install as a systemd service, not an Upstart job.
-  --http-auth CREDS   Enable HTTP authentication using Basic auth, requiring
-                      the specified credentials for every request sent to the
-                      REST API where CREDS is given in the form of
-                      `<user>:<pass>`.
-
-OS Service support:
-
-The --systemd and --upstart VERSION options are mutually exclusive.  If neither
-is specified, the service is installed as an Upstart job using a template that
-assumes Upstart 1.4 or higher.
-```
-
-The URL formats supported by `--metrics STATS` are defined by strong-supervisor.
-
-### slc pmctl
-
-```
-usage: sl-pmctl [options] [command ...]
+usage: slc ctl [options] [command]
 
 Run-time control of the Strongloop process manager.
 
@@ -271,3 +285,57 @@ Commands:
 Worker `ID` is either a node cluster worker ID, or an operating system process
 ID. The special worker ID `0` can be used to identify the master.
 ```
+
+### sl-pm-install
+
+This tool is also available as `slc pm-install` if the
+[strongloop](https://github.com/strongloop/strongloop) client toolset is
+installed.
+
+```
+usage: sl-pm-install [options]
+
+Install the Strongloop process manager as a service.
+
+Options:
+  -h,--help           Print this message and exit.
+  -v,--version        Print version and exit.
+  -m,--metrics STATS  Specify --metrics option for supervisor running deployed
+                      applications.
+  -b,--base BASE      Base directory to work in (default is $HOME of the user
+                      that manager is run as, see --user).
+  -e,--set-env K=V... Initial application environment variables. If setting
+                      multiple variables they must be quoted into a single
+                      argument: "K1=V1 K2=V2 K3=V3".
+  -u,--user USER      User to run manager as (default is strong-pm).
+  -p,--port PORT      Listen on PORT for application deployment (default 8701).
+  -n,--dry-run        Don't write any files.
+  -j,--job-file FILE  Path of Upstart job to create (default is
+                      `/etc/init/strong-pm.conf`).
+  -f,--force          Overwrite existing job file if present.
+  --upstart VERSION   Specify Upstart version, 1.4 or 0.6 (default is 1.4).
+  --systemd           Install as a systemd service, not an Upstart job.
+  --http-auth CREDS   Enable HTTP authentication using Basic auth, requiring
+                      the specified credentials for every request sent to the
+                      REST API where CREDS is given in the form of
+                      `<user>:<pass>`.
+
+OS Service support:
+
+The --systemd and --upstart VERSION options are mutually exclusive.  If neither
+is specified, the service is installed as an Upstart job using a template that
+assumes Upstart 1.4 or higher.
+```
+
+The URL formats supported by `--metrics STATS` are defined by strong-supervisor.
+
+
+## License
+
+strong-pm uses a dual license model.
+
+You may use this library under the terms of the [Artistic 2.0 license][],
+or under the terms of the [StrongLoop Subscription Agreement][].
+
+[Artistic 2.0 license]: http://opensource.org/licenses/Artistic-2.0
+[StrongLoop Subscription Agreement]: http://strongloop.com/license
