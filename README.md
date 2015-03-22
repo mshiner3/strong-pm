@@ -7,67 +7,22 @@ and debug your apps in development and in production.
 
 For more details, see http://strong-pm.io.
 
-
-## Installation
-
-***XXX @ijroth - remove this section? I think its useful, maybe move after
-Features and before Quick Start***
-
-Install the client-side [CLI](https://github.com/strongloop/strongloop) and
-[GUI](https://github.com/strongloop/strong-arc) (`slc arc`):
-
-    npm install -g strongloop
-    slc -h
-
-Install the manager on a production server using npm:
-
-    npm install -g strong-pm && sl-pm-install
-
-Or using docker:
-
-    curl -sO http://strong-pm.io/docker.sh | sudo /bin/sh
-
-
 ## Features
-
-***XXX original short version***
-
-- full life-cycle toolset, most tools available as both CLI and GUI
-- git and http-based deploy
-- strong authentication and encryption via basic auth and ssh
-- zero down-time restart on redeploy
-- robust multi-cpu usage and restart on failure via node
-  [cluster](https://nodejs.org/api/cluster.html#cluster_how_it_works)
-- run-time CPU and heap profiling
-- log, process environment, and npm dependency managment
-- performance metrics, such as loop times, requests response times, etc
-- expanding list of 3rdparty integrations, metrics can be published to
-  [etsy/statsd](https://github.com/etsy/statsd) compatible servers, such as
-  [DataDog](https://www.datadoghq.com/), as well as natively to
-  [Graphite](http://graphite.readthedocs.org/en/latest) and
-  [Splunk](http://www.splunk.com), and even syslog and raw log files.
-
-
-## Features
-
-***XXX Long version from https://github.com/strongloop/strong-pm.io/blob/master/index.html***
-
-***XXX Issac: you said you wanted feature list from strong-pm.io, see below, is
-this what you meant?***
-
-StrongLoop provides tools for the entire Node devops lifecyle.
 
 - Build, package, and deploy your Node application to a local or remote system.
-- View CPU profiles and heap snapshots to optimize performance and diagnose memory leaks.
-- Manage processes and clusters using StrongLoop Process Manager.
-- View performance metrics on your application.
-- Use graphical tool StrongLoop Arc, **slc arc**, or command-line tool, **slc**.
+- Manage processes and cluster (use all the cores on your server), adjust sizes, built-in load balancer
+- Automatic restarts keep applications running forever
+- Zero-downtime redeploy/upgrade
+- View performance metrics on your application
+- View CPU profiles and heap snapshots to optimize performance and diagnose memory leaks
+- Use graphical tool StrongLoop Arc, **slc arc**, or command-line tool, **slc**
 
 ### Build & Deploy
 
 - Automated build and multi-host deploy.
 - Zero-downtime application restarts and upgrades.
 - Install dependencies, run custom build steps, and prune development dependencies without affecting your source tree.
+- Deploy without dependence on outside servers (like NPM)
 - Create an npm package or commit the build onto a Git deploy branch.
 
 ### Profile
@@ -75,7 +30,7 @@ StrongLoop provides tools for the entire Node devops lifecyle.
 - Heap snapshots and CPU profiles.
 - Profile local or remote applications with Arc.
 - Profile local applications with slc.
-- Use the _watchdog_ to start CPU profiling when the Node event loop stalls.
+- Use the _watchdog_ to start CPU profiling when the Node event loop stalls. ***XXX we should really remove this feature and only make it available through Arc... different issue though... maybe just remove for now.***
 
 ### Process Manager
 
@@ -91,18 +46,38 @@ StrongLoop provides tools for the entire Node devops lifecyle.
 
 ***XXX I think above should enumerate the 3rdparty integrations both here and on
 strong-pm.io, I'll resync with strong-pm.io after Rand has updated it, see
-original Feature list***
+original Feature list - agree --Issac***
 
+## Installation
+
+Install the client-side [CLI](https://github.com/strongloop/strongloop) and
+[GUI](https://github.com/strongloop/strong-arc) (`slc arc`):
+
+    npm install -g strongloop
+    slc -h
+
+Run app
+
+    slc start app.js
+    
+Or to deploy and manage remotely, install the manager on a production server using npm:
+
+    npm install -g strong-pm && sl-pm-install
+
+Or using docker:
+
+    curl -sO http://strong-pm.io/docker.sh | sudo /bin/sh
 
 ## Docs & Community
 
-- [StrongLoop Documentation](http://docs.strongloop.com/display/SLC/Operating+Node+applications).
+- [StrongLoop Documentation](http://docs.strongloop.com/display/SLC/Operating+Node+applications)
 - [Professional support](http://strongloop.com/node-js/subscription-plans/)
-- [StrongLoop Google Group](https://groups.google.com/forum/#!forum/strongloop).
-- [GitHub issues](https://github.com/strongloop/strong-pm/issues).
-- [Gitter chat](https://gitter.im/strongloop/chat).
+- [StrongLoop Google Group](https://groups.google.com/forum/#!forum/strongloop)
+- [GitHub issues](https://github.com/strongloop/strong-pm/issues)
+- [Gitter chat](https://gitter.im/strongloop/chat)
 - [Install on production server](./INSTALL.md)
 - [Application life-cycle](./LIFE-CYCLE.md)
+- XXX pointers to some blogs that describe how to use this? I think we're releasing some blogs.
 
 
 ## Quick Start
