@@ -17,6 +17,8 @@ For more details, see http://strong-pm.io.
 - View CPU profiles and heap snapshots to optimize performance and diagnose memory leaks
 - Use graphical tool StrongLoop Arc, **slc arc**, or command-line tool, **slc**
 
+*** XXX We should put the comparison table right here methinks ***
+
 ### Build & Deploy
 
 - Automated build and multi-host deploy.
