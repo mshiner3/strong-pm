@@ -17,7 +17,7 @@ For more details, see http://strong-pm.io.
 - View CPU profiles and heap snapshots to optimize performance and diagnose memory leaks
 - Use graphical tool StrongLoop Arc, **slc arc**, or command-line tool, **slc**
 
-*** XXX We should put the comparison table right here methinks ***
+***XXX We should put the comparison table right here methinks***
 
 ### Build & Deploy
 
@@ -32,7 +32,10 @@ For more details, see http://strong-pm.io.
 - Heap snapshots and CPU profiles.
 - Profile local or remote applications with Arc.
 - Profile local applications with slc.
-- Use the _watchdog_ to start CPU profiling when the Node event loop stalls. ***XXX we should really remove this feature and only make it available through Arc... different issue though... maybe just remove for now.***
+- Use the _watchdog_ to start CPU profiling when the Node event loop stalls.
+  ***XXX we should really remove this feature and only make it available through
+  Arc... different issue though... maybe just remove for now.***
+
 
 ### Process Manager
 
@@ -79,7 +82,7 @@ Or using docker:
 - [Gitter chat](https://gitter.im/strongloop/chat)
 - [Install on production server](./INSTALL.md)
 - [Application life-cycle](./LIFE-CYCLE.md)
-- XXX pointers to some blogs that describe how to use this? I think we're releasing some blogs.
+- ***XXX pointers to our blogs***
 
 
 ## Quick Start
